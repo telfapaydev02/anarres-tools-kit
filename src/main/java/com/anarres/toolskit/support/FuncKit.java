@@ -74,7 +74,7 @@ public class FuncKit {
 		if(bytes==null){
 			return null;
 		}
-		ByteArrayInputStream bais = null;
+		ByteArrayInputStream bais;
 		try {
 			//
 			bais = new ByteArrayInputStream(bytes);

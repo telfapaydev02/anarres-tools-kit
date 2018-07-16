@@ -2,6 +2,8 @@ package com.anarres.toolskit.support;
 
 import org.apache.commons.codec.DecoderException;
 import org.apache.commons.codec.binary.Hex;
+import org.bouncycastle.asn1.ASN1InputStream;
+import org.bouncycastle.asn1.x509.RSAPublicKeyStructure;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -9,10 +11,12 @@ import javax.crypto.Cipher;
 import javax.crypto.SecretKey;
 import javax.crypto.SecretKeyFactory;
 import javax.crypto.spec.DESKeySpec;
+import java.io.IOException;
 import java.io.UnsupportedEncodingException;
-import java.math.BigInteger;
 import java.security.*;
+import java.security.spec.InvalidKeySpecException;
 import java.security.spec.PKCS8EncodedKeySpec;
+import java.security.spec.RSAPublicKeySpec;
 import java.util.*;
 
 /**
@@ -33,12 +37,62 @@ public class HashKit {
         return salt;
     }
 
-    public static String RsaEncode(String src, String privateKey, String charset) {
+    /**
+     *
+     * @param src
+     * @param keyname 例如 RSA
+     * @param signname 例如 SHA1withRSA
+     * @param pubKey
+     * @param signature
+     * @param charset
+     * @return
+     * @throws InvalidKeySpecException
+     * @throws SignatureException
+     * @throws NoSuchAlgorithmException
+     * @throws InvalidKeyException
+     * @throws UnsupportedEncodingException
+     */
+    public static boolean verify(String src, String keyname, String signname, String pubKey, String signature, String charset) throws InvalidKeySpecException, SignatureException, NoSuchAlgorithmException, InvalidKeyException, IOException {
+        try {
+            ASN1InputStream in = new ASN1InputStream(HexKit.decodeHex(pubKey.toCharArray()));
+            RSAPublicKeyStructure pStruct = RSAPublicKeyStructure.getInstance(in.readObject());
+            RSAPublicKeySpec spec = new RSAPublicKeySpec(pStruct.getModulus(), pStruct.getPublicExponent());
+            KeyFactory kf = KeyFactory.getInstance(keyname);
+            if (in != null) {
+                in.close();
+            }
+            PublicKey pk = kf.generatePublic(spec);
+            Signature signetcheck = Signature.getInstance(signname);
+            signetcheck.initVerify(pk);
+            byte[] by = src.getBytes(charset);
+            signetcheck.update(by);
+            return signetcheck.verify(HexKit.decodeHex(signature.toCharArray()));
+        } catch (Exception e) {
+            throw e;
+        }
+    }
+
+    /**
+     *
+     * @param src 源字符传
+     * @param keyname 例如： RSA
+     * @param signname 例如 SHA1withRSA
+     * @param privateKey
+     * @param charset
+     * @return
+     * @throws SignatureException
+     * @throws DecoderException
+     * @throws UnsupportedEncodingException
+     * @throws NoSuchAlgorithmException
+     * @throws InvalidKeyException
+     * @throws InvalidKeySpecException
+     */
+    public static String signature(String src, String keyname, String signname, String privateKey, String charset) throws SignatureException, DecoderException, UnsupportedEncodingException, NoSuchAlgorithmException, InvalidKeyException, InvalidKeySpecException {
         try {
             PKCS8EncodedKeySpec priPKCS8 = new PKCS8EncodedKeySpec(Hex.decodeHex(privateKey));
-            KeyFactory keyf = KeyFactory.getInstance("RSA");
+            KeyFactory keyf = KeyFactory.getInstance(keyname);
             PrivateKey myprikey = keyf.generatePrivate(priPKCS8);
-            Signature signet = Signature.getInstance("SHA1withRSA");
+            Signature signet = Signature.getInstance(signname);
             signet.initSign(myprikey);
             byte[] infoByte = src.getBytes(charset);
             signet.update(infoByte);
@@ -46,9 +100,7 @@ public class HashKit {
             String signature = Hex.encodeHexString(signed);
             return signature;
         } catch (Exception e) {
-            System.out.println("sign methed case exception:" + e.getMessage());
-            e.printStackTrace();
-            return null;
+            throw e;
         }
     }
 
@@ -186,7 +238,7 @@ public class HashKit {
      * @param order 负数为从小到大， 正数为从大到小。 0 表示不进行任何排序。
      * @return
      */
-    public static String signSrc(Map<String, Object> map, String separator, String eq, boolean useEmpty, int order) {
+    public static String signSrc(Map<String, ? extends Object> map, String separator, String eq, boolean useEmpty, int order) {
         if(map == null || map.size() < 1) {
             return "";
         }

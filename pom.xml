@@ -20,7 +20,7 @@
         <zxing.version>3.2.1</zxing.version>
         <mybatis-plus.version>2.1.8</mybatis-plus.version>
         <zookeeper.version>3.4.7</zookeeper.version>
-
+        <bcprov-jdk16.version>1.46</bcprov-jdk16.version>
     </properties>
 
     <dependencies>
@@ -89,6 +89,12 @@
             <artifactId>zookeeper</artifactId>
             <version>${zookeeper.version}</version>
             <scope>provided</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>org.bouncycastle</groupId>
+            <artifactId>bcprov-jdk16</artifactId>
+            <version>${bcprov-jdk16.version}</version>
         </dependency>
 
     </dependencies>
