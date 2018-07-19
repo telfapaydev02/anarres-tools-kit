@@ -258,7 +258,8 @@ public class HashKit {
             if(!useEmpty && (null == map.get(key) || "".equals(map.get(key).toString().trim()))) {
                 continue;
             }
-            src += key + eq + map.get(key) + separator;
+            Object value = map.get(key) == null ? "" : map.get(key);
+            src += key + eq + value.toString() + separator;
         }
         return src.substring(0, src.length() - separator.length());
     }
