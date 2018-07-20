@@ -263,12 +263,4 @@ public class HashKit {
         }
         return src.substring(0, src.length() - separator.length());
     }
-
-    public static void main(String[] args) throws DecoderException {
-        String hex = Hex.encodeHexString("youandme".getBytes());
-        System.out.println("hex : " + hex);
-        hex = new String(Hex.decodeHex(hex.toCharArray()));
-        System.out.println("hex : " + hex);
-
-    }
 }
