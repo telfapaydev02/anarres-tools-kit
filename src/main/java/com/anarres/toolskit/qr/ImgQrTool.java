@@ -92,7 +92,7 @@ public class ImgQrTool {
 
         try {
             String format = "jpg";// 图像类型
-            Map<EncodeHintType, Object> hints = new HashMap<EncodeHintType, Object>();
+            Map<EncodeHintType, Object> hints = new HashMap<>();
             hints.put(EncodeHintType.CHARACTER_SET, "UTF-8");
             BitMatrix bitMatrix = new MultiFormatWriter().encode(content, BarcodeFormat.QR_CODE, width, height, hints);// 生成矩阵
             File dest = new File(destImagePath);
@@ -120,7 +120,7 @@ public class ImgQrTool {
             }
         }
 
-        Map<EncodeHintType, Object> hint = new HashMap<EncodeHintType, Object>();
+        Map<EncodeHintType, Object> hint = new HashMap<>();
         hint.put(EncodeHintType.CHARACTER_SET, "utf-8");
         hint.put(EncodeHintType.ERROR_CORRECTION, ErrorCorrectionLevel.H);
         hint.put(EncodeHintType.MARGIN, 1);// 二维码整体白框
@@ -173,11 +173,10 @@ public class ImgQrTool {
      * @param height       目标高度
      * @param width        目标宽度
      * @param hasFiller    比例不对时是否需要补白：true为补白; false为不补白;
-     * @throws IOException
      */
     private static BufferedImage scale(String srcImageFile, int height, int width, boolean hasFiller)
             throws IOException {
-        double ratio = 0.0; // 缩放比例
+        double ratio; // 缩放比例
         File file = new File(srcImageFile);
         BufferedImage srcImage = ImageIO.read(file);
         Image destImage = srcImage.getScaledInstance(width, height, BufferedImage.SCALE_SMOOTH);
@@ -219,7 +218,7 @@ public class ImgQrTool {
             int qrImageWidth = qrImage.getWidth();
             int qrImageHeight = qrImage.getHeight();
 
-            String[] splitStrLines = null;
+            String[] splitStrLines;
             splitStrLines = splitStrLines(para.getWordContent(), qrImageWidth / para.getWordSize());
             int fontsImageHeight = splitStrLines.length * para.getWordSize() + 10; //防止文字遮挡
 
@@ -277,7 +276,7 @@ public class ImgQrTool {
         return strs;
     }
 
-    public static void main(String[] args) throws IOException {
+    public static void main(String[] args) {
         for (int i = 1; i <= 1; i++) {
             QrImage para = new QrImage.Builder()
                     .setFileOutputPath("D:\\二维码\\test\\" + i + ".jpg")

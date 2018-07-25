@@ -43,10 +43,10 @@ import java.util.Map;
  *      String response = client.doGet(url, params, headers, "UTF-8", null);
  *
  * </code>
- * 以上代码可能过于繁琐。参数含义不够清晰，而且重载方法太多，不容易选择。可以考虑使用SimpleHttpRequest
+ * 以上代码可能过于繁琐。参数含义不够清晰，而且重载方法太多，不容易选择。可以考虑使用HttpRequest
  * <code>
- *      SimpleHttpClient client = SimpleHttpClient.http().build();
- *      String response = SimpleHttpRequest.newBuilder().url(url)
+ *      HttpClient client = HttpClient.http().build();
+ *      String response = HttpRequest.newBuilder().url(url)
  *          .header(headkey1, headval1)
  *          .header(headkey2, headval2)
  *          .paramter(pk1, pv1)
@@ -54,7 +54,7 @@ import java.util.Map;
  *          .method("GET")
  *          .charsetUTF()
  *          .build()
- *          .send(client);
+ *          .execute(client);
  *
  * </code>
  *

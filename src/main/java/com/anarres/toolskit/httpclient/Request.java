@@ -20,10 +20,10 @@ import java.util.function.Supplier;
 
 /**
  * 一个简单的HttpRequest。 作用是描述请求内容
- *  多数时候Fluent 通过使用{@link org.apache.http.client.fluent.Request}的实现已经完全够用，例如 String html = Request.Post("http://www.test.com").execute().returnContent().asString();
+ *  多数时候Fluent 通过使用{@link org.apache.http.client.fluent.Request}的实现已经完全够用，例如 String html = org.apache.http.client.fluent.Request.Post("http://www.test.com").execute().returnContent().asString();
  *  Request 的主要作用是和 HttpClient 配合使用，HttpClient提供默认的配置。某些情况下，例如某个平台下的所有接口都必须使用SSL。因此每个
  *  Request的构建都比较麻烦，使用HttpClient可以简化这种配置，并提供给Request。
- *  使用SimpleRequest的异步方式时，不用担心request和response不一致的情况。换句话说，同一时间发送N个request，每个A request返回的Promise不会获取到 B request的结果。
+ *  使用Request的异步方式时，不用担心request和response不一致的情况。换句话说，同一时间发送N个request，每个A request返回的Promise不会获取到 B request的结果。
  *  即便访问N个request访问的是同一个网站，也不混淆。通过每个request开启一个连接，这样就能保证request和response的一致)。
  * Created by ath on 2016/10/28.
  */

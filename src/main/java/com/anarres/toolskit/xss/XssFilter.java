@@ -13,7 +13,7 @@ public class XssFilter implements Filter {
 
     private List<String> urlExclusion = null;
 
-    public void init(FilterConfig filterConfig) throws ServletException {
+    public void init(FilterConfig filterConfig) {
         this.filterConfig = filterConfig;
     }
 
