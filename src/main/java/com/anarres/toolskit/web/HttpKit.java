@@ -34,8 +34,8 @@ import java.util.Map;
 
 public class HttpKit {
 
-    public static String getIp(){
-       return HttpKit.getRequest().getRemoteHost();
+    public static String getIpAddress(){
+       return getIpAddress(getRequest());
     }
 
     /**
@@ -51,6 +51,25 @@ public class HttpKit {
             values.put(paramName, paramValue);
         }
         return values;
+    }
+
+    public static String getIpAddress(HttpServletRequest request) {
+        String ip = request.getHeader("x-forwarded-for");
+        if (ip == null || ip.length() == 0 || "unknown".equalsIgnoreCase(ip)) {
+            ip = request.getHeader("Proxy-Client-IP");
+        } else {
+            int index = ip.lastIndexOf(",");
+            if (index != -1) {
+                ip = ip.substring(index + 1);
+            }
+        }
+        if (ip == null || ip.length() == 0 || "unknown".equalsIgnoreCase(ip)) {
+            ip = request.getHeader("WL-Proxy-Client-IP");
+        }
+        if (ip == null || ip.length() == 0 || "unknown".equalsIgnoreCase(ip)) {
+            ip = request.getRemoteAddr();
+        }
+        return ip;
     }
 
     /**
