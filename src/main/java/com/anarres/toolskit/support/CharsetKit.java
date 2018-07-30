@@ -77,7 +77,23 @@ public class CharsetKit {
 		}
 		return str;
 	}
-	
+
+	/**
+	 * 根据某种编码方式将字节数组转换成字符串
+	 * @param b 字节数组
+	 * @param offset 要转换的起始位置
+	 * @param len 要转换的长度
+	 * @param encoding 编码方式
+	 * @return 如果encoding不支持，返回一个缺省编码的字符串
+	 */
+	public static String string(byte[] b, int offset, int len, String encoding) {
+		try {
+			return new String(b, offset, len, encoding);
+		} catch (UnsupportedEncodingException e) {
+			return new String(b, offset, len);
+		}
+	}
+
 	/**
 	 * 首字母变大写
 	 */
