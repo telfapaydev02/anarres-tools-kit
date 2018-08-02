@@ -1,5 +1,6 @@
-package com.anarres.toolskit.cache;
+package com.anarres.toolskit.cache.redis;
 
+import com.anarres.toolskit.cache.HCache;
 import com.anarres.toolskit.support.FuncKit;
 import org.springframework.data.redis.core.RedisCallback;
 import org.springframework.data.redis.core.RedisTemplate;
@@ -14,8 +15,8 @@ import java.util.Set;
  * 由于redis本身便支持 HMap (map里面包含map)的方式来存储数据。
  * 因此Redis的Cached实现更
  */
-public class RedisCachedImpl implements ICached {
-	public RedisCachedImpl() {
+public class RedisHCached implements HCache {
+	public RedisHCached() {
 
 	}
 	// -1 - never expire

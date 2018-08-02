@@ -81,7 +81,7 @@ public class IPSeeker {
     private byte[] buf;   
     private byte[] b4;   
     private byte[] b3;   
-    /**  
+    /**
      * 私有构造函数  
      */  
     public IPSeeker(String file)  {

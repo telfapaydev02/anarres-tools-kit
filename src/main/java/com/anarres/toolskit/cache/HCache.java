@@ -8,7 +8,7 @@ import java.util.Set;
  * 该 Cache 不能简单的等价于 Map 接口。而应该看做 包含多个Map的Map
  *
  */
-public interface ICached {
+public interface HCache {
 	/**
 	 * 删除 缓存
 	 * @param key

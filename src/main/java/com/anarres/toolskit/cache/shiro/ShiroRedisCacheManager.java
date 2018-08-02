@@ -1,5 +1,7 @@
-package com.anarres.toolskit.cache;
+package com.anarres.toolskit.cache.shiro;
 
+import com.anarres.toolskit.cache.HCache;
+import com.anarres.toolskit.cache.redis.RedisCache;
 import org.apache.shiro.cache.AbstractCacheManager;
 import org.apache.shiro.cache.Cache;
 import org.apache.shiro.cache.CacheException;
@@ -10,16 +12,15 @@ import org.apache.shiro.cache.CacheException;
  *
  */
 public class ShiroRedisCacheManager extends AbstractCacheManager {
-	private ICached cached;
+	private final HCache cached;
+
+	public ShiroRedisCacheManager(HCache cached) {
+		this.cached = cached;
+	}
+
 	@Override
 	protected Cache createCache(String cacheName) throws CacheException {
-		return new ShiroRedisCache(cacheName,cached);
-	}
-	public ICached getCached() {
-		return cached;
-	}
-	public void setCached(ICached cached) {
-		this.cached = cached;
+		return new ShiroRedisCache(new RedisCache(cacheName, cached));
 	}
 
 }
