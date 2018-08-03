@@ -3,6 +3,8 @@ package com.anarres.toolskit.support;
 import java.lang.reflect.Array;
 import java.util.*;
 import java.util.Map.Entry;
+import java.util.function.Consumer;
+import java.util.function.Function;
 
 /**
  * 集合相关工具类，包括数组
@@ -11,11 +13,11 @@ import java.util.Map.Entry;
  * 
  */
 public class CollectionKit {
-	
+	private static final Random random = new Random();
 	private CollectionKit() {
 		// 静态类不可实例化
 	}
-	
+
 	/**
 	 * 以 conjunction 为分隔符将集合转换为字符串
 	 * 
@@ -60,18 +62,27 @@ public class CollectionKit {
 		return sb.toString();
 	}
 
-	public static <T> T randomOne(List<T> coll) {
-		Random random = new Random();
-		int index = random.nextInt(coll.size());
-		return coll.get(index);
-	}
 
 	public static <T> T randomOne(Collection<T> coll) {
-		Random random = new Random();
 		int index = random.nextInt(coll.size());
 		return (T)coll.toArray()[index];
 	}
-	
+
+	public static <T> T randomOne(Collection<T> coll, Function<T, Integer> weight) {
+		int total = coll.stream().map(weight).reduce((integer, integer2) -> integer + integer2).get();
+		int current = random.nextInt(total);
+		for(T obj: coll) {
+			int w = weight.apply(obj);
+			if(current < w) {
+				return obj;
+			} else {
+				current -= w;
+			}
+		}
+
+		throw new RuntimeException("方法计算错误");
+	}
+
 	/**
 	 * 将多个集合排序并显示不同的段落（分页）
 	 * @param pageNo 页码
@@ -130,18 +141,14 @@ public class CollectionKit {
 	 */
 	public static List<Entry<Long, Long>> sortEntrySetToList(Set<Entry<Long, Long>> set) {
 		List<Entry<Long, Long>> list = new LinkedList<Entry<Long, Long>>(set);
-		Collections.sort(list, new Comparator<Entry<Long, Long>>(){
-
-			@Override
-			public int compare(Entry<Long, Long> o1, Entry<Long, Long> o2) {
-				if (o1.getValue() > o2.getValue()){
-					return 1;
-				}
-				if (o1.getValue() < o2.getValue()){
-					return -1;
-				}
-				return 0;
+		Collections.sort(list, (o1, o2) -> {
+			if (o1.getValue() > o2.getValue()){
+				return 1;
 			}
+			if (o1.getValue() < o2.getValue()){
+				return -1;
+			}
+			return 0;
 		});
 		return list;
 	}
