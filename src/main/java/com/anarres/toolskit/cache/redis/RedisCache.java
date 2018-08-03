@@ -60,7 +60,7 @@ public class RedisCache<K, V> implements Cache<K, V> {
     public V put(K key, V value) throws CacheException {
         logger.debug("根据key存储 key [" + key + "]");
         try {
-            cached.updateHashCached(getByteName(),getByteKey(key), FuncKit.serialize(value),null);
+            cached.updateHashCached(getByteName(),getByteKey(key), FuncKit.serialize(value));
             return value;
         } catch (Throwable t) {
             throw new CacheException(t);

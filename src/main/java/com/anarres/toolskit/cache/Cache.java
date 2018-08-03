@@ -1,18 +1,17 @@
 package com.anarres.toolskit.cache;
 
-import org.apache.shiro.cache.CacheException;
 
 import java.util.Collection;
 import java.util.Set;
 
 public interface Cache<K, V> {
-    V get(K key) throws CacheException;
+    V get(K key);
 
-    V put(K key, V value) throws CacheException;
+    V put(K key, V value);
     
-    V remove(K key) throws CacheException;
+    V remove(K key);
 
-    void clear() throws CacheException;
+    void clear();
 
     int size();
 

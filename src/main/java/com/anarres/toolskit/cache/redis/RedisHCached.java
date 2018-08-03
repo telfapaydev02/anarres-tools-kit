@@ -19,8 +19,8 @@ public class RedisHCached implements HCache {
 	public RedisHCached() {
 
 	}
-	// -1 - never expire
-	private int expire = -1;
+	// -1 - never expireMS
+	private int expireMS = -1;
 	private RedisTemplate<String, Object> redisTemplate;
 
 	@Override
@@ -33,13 +33,13 @@ public class RedisHCached implements HCache {
 	}
 
 	@Override
-	public String updateCached(final byte[] key, final byte[] session,final Long expireSec) {
+	public String updateCached(final byte[] key, final byte[] value, final Long expireMS) {
 		return (String) redisTemplate.execute((RedisCallback<Object>) connection -> {
-            connection.set(key, session);
-            if(expireSec!=null){
-                connection.expire(key, expireSec);
+            connection.set(key, value);
+            if(expireMS!=null){
+                connection.pExpire(key, expireMS);
             }else{
-                connection.expire(key, expire);
+                connection.pExpire(key, this.expireMS);
             }
             return new String(key);
         });
@@ -93,7 +93,7 @@ public class RedisHCached implements HCache {
 	}
 
 	@Override
-	public Boolean  updateHashCached(final byte[] key,final byte[] mapkey, final byte[] value, final Long expireSec) {
+	public Boolean  updateHashCached(final byte[] key,final byte[] mapkey, final byte[] value) {
 		return redisTemplate.execute((RedisCallback<Boolean>) connection -> {
             Boolean hSet = connection.hSet(key, mapkey, value);
 
@@ -149,7 +149,7 @@ public class RedisHCached implements HCache {
 
          });
 	}
-	
+
 	public RedisTemplate<String, Object> getRedisTemplate() {
 		return redisTemplate;
 	}
@@ -158,12 +158,12 @@ public class RedisHCached implements HCache {
 		this.redisTemplate = redisTemplate;
 	}
 
-	public int getExpire() {
-		return expire;
+	public int getExpireMS() {
+		return expireMS;
 	}
 
-	public void setExpire(int expire) {
-		this.expire = expire;
+	public void setExpireMS(int expireMS) {
+		this.expireMS = expireMS;
 	}
 
 	@Override

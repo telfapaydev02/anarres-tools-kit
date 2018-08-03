@@ -23,7 +23,7 @@ public interface HCache {
 	 * @return
 	 * @throws Exception
 	 */
-	Object updateCached(byte[] key, byte[] value, Long expire)throws Exception;
+	Object updateCached(byte[] key, byte[] value, Long expireMS)throws Exception;
 	/**
 	 * 获取缓存
 	 * @param key
@@ -56,7 +56,7 @@ public interface HCache {
 	 * @return
 	 * @throws Exception
 	 */
-	Boolean updateHashCached(byte[] key, byte[] mapkey, byte[] value, Long expire)throws Exception;
+	Boolean updateHashCached(byte[] key, byte[] mapkey, byte[] value)throws Exception;
 
 
 	/**
