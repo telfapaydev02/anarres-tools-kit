@@ -123,7 +123,9 @@ public class AsyncHttpClient {
             for (Map.Entry<String, String> entry : params.entrySet()) {
                 String value = entry.getValue();
 
-                if (value != null) {
+                if (value == null) {
+                    pairs.add(new BasicNameValuePair(entry.getKey(), ""));
+                } else {
                     pairs.add(new BasicNameValuePair(entry.getKey(), value));
                 }
             }

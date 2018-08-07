@@ -1,11 +1,8 @@
 package com.anarres.toolskit.cache.shiro;
 
 import com.anarres.toolskit.cache.redis.RedisCache;
-import com.anarres.toolskit.support.FuncKit;
 import org.apache.shiro.cache.Cache;
 import org.apache.shiro.cache.CacheException;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import java.util.Collection;
 import java.util.Set;
@@ -25,37 +22,66 @@ public class ShiroRedisCache<K,V> implements Cache<K,V> {
 
 	@Override
 	public V get(K key) throws CacheException {
-		return impl.get(key);
+		try {
+			return impl.get(key);
+		} catch (Exception e) {
+			throw new CacheException(e);
+		}
 	}
 
 	@Override
 	public V put(K key, V value) throws CacheException {
-		return impl.put(key, value);
+		try {
+			return impl.put(key, value);
+		} catch (Exception e) {
+			throw new CacheException(e);
+		}
 	}
 
 	@Override
 	public V remove(K key) throws CacheException {
-		return impl.remove(key);
+		try {
+			return impl.remove(key);
+		} catch (Exception e) {
+			throw new CacheException(e);
+		}
 	}
 
 	@Override
 	public void clear() throws CacheException {
-		impl.clear();
+		try {
+			impl.clear();
+		} catch (Exception e) {
+			throw new CacheException(e);
+		}
 	}
 
 	@Override
 	public int size() {
-		return impl.size();
+		try {
+			return impl.size();
+		} catch (Exception e) {
+			throw new CacheException(e);
+		}
 	}
 
 	@Override
 	public Set<K> keys() {
-		return impl.keys();
+		try {
+			return impl.keys();
+		} catch (Exception e) {
+			throw new CacheException(e);
+		}
+
 	}
 
 	@Override
 	public Collection<V> values() {
-		return impl.values();
+		try {
+			return impl.values();
+		} catch (Exception e) {
+			throw new CacheException(e);
+		}
 	}
 
 }

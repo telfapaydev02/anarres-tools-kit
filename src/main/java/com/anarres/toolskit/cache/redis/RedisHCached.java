@@ -80,7 +80,7 @@ public class RedisHCached implements HCache {
 	public Set getHashKeys(final byte[] key) {
 		return redisTemplate.execute((RedisCallback<Set>) connection -> {
             Set<byte[]> hKeys = connection.hKeys(key);
-            if(hKeys==null||hKeys.size()>1){
+            if(hKeys==null||hKeys.size() < 1){
                 return null;
             }
             Set set=new HashSet();
@@ -124,7 +124,6 @@ public class RedisHCached implements HCache {
 	public Long getHashSize(final byte[] key) {
 		return redisTemplate.execute((RedisCallback<Long>) connection -> {
             Long len = connection.hLen(key);
-
             return len;
 
         });
@@ -170,7 +169,6 @@ public class RedisHCached implements HCache {
 	public List getHashValues(final byte[] key) {
 		return redisTemplate.execute((RedisCallback<List>) connection -> {
              List<byte[]> hVals = connection.hVals(key);
-
              if(hVals==null||hVals.size()<1){
                  return null;
              }

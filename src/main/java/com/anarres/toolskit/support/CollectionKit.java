@@ -5,6 +5,7 @@ import java.util.*;
 import java.util.Map.Entry;
 import java.util.function.Consumer;
 import java.util.function.Function;
+import java.util.function.Supplier;
 
 /**
  * 集合相关工具类，包括数组
@@ -61,6 +62,17 @@ public class CollectionKit {
 		}
 		return sb.toString();
 	}
+
+	public static <CT extends Collection<T>, CR extends Collection<R>, T, R> CR map(CT ct, Supplier<CR> crGetter, Function<T, R> map) {
+		CR cr = crGetter.get();
+		for(T t : ct) {
+			R r = map.apply(t);
+			cr.add(r);
+		}
+
+		return cr;
+	}
+
 
 
 	public static <T> T randomOne(Collection<T> coll) {
