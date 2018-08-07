@@ -289,8 +289,8 @@ public class CollectionKit {
 	 * @param newElement 新元素
 	 * @return 新数组
 	 */
-	public static <T> T[] append(T[] buffer, T newElement) {
-		T[] t = resize(buffer, buffer.length + 1, newElement.getClass());
+	public static <T, C extends T> T[] append(T[] buffer, C newElement) {
+		T[] t = resize(buffer, buffer.length + 1, buffer.getClass().getComponentType());
 		t[buffer.length] = newElement;
 		return t;
 	}
