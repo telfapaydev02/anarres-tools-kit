@@ -135,9 +135,9 @@ public class HttpClient {
             ArrayList<NameValuePair> pairs = new ArrayList(params.size());
             for (Map.Entry<String, String> entry : params.entrySet()) {
                 String value = entry.getValue();
-                if (value != null) {
-                    pairs.add(new BasicNameValuePair(entry.getKey(), value));
-                }
+                value = (value == null ? "": value);
+                pairs.add(new BasicNameValuePair(entry.getKey(), value));
+
             }
             requestEntity = new UrlEncodedFormEntity(pairs, charset);
 
