@@ -5,10 +5,7 @@ import com.anarres.toolskit.support.FuncKit;
 import org.springframework.data.redis.core.RedisCallback;
 import org.springframework.data.redis.core.RedisTemplate;
 
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 /**
  *	redis 缓存实现。
@@ -20,11 +17,11 @@ public class RedisHCached implements HCache {
 
 	}
 	// -1 - never expireMS
-	private int expireMS = -1;
+	private long expireMS = -1;
 	private RedisTemplate<String, Object> redisTemplate;
 
 	@Override
-	public String deleteCached(final byte[] key) {
+	public String deleteCached(final byte[]... key) {
 		redisTemplate.execute((RedisCallback<Object>) connection -> {
             connection.del(key);
             return null;
@@ -33,14 +30,10 @@ public class RedisHCached implements HCache {
 	}
 
 	@Override
-	public String updateCached(final byte[] key, final byte[] value, final Long expireMS) {
+	public String updateCached(final byte[] key, final byte[] value, final Optional<Long> expireMS) {
 		return (String) redisTemplate.execute((RedisCallback<Object>) connection -> {
             connection.set(key, value);
-            if(expireMS!=null){
-                connection.pExpire(key, expireMS);
-            }else{
-                connection.pExpire(key, this.expireMS);
-            }
+            connection.pExpire(key, expireMS.orElse(this.expireMS));
             return new String(key);
         });
 
@@ -57,10 +50,10 @@ public class RedisHCached implements HCache {
 
 
 	@Override
-	public Set getKeys(final byte[] keys) {
+	public Set getKeys(final byte[] pattern) {
 		return redisTemplate.execute((RedisCallback<Set>) connection -> {
-            Set<byte[]> setByte = connection.keys(keys);
-            if (setByte == null || setByte.size() < 1) {
+            Set<byte[]> setByte = connection.keys(pattern);
+            if (null == setByte || setByte.size() < 1) {
                 return null;
             }
             Set set = new HashSet();
@@ -149,6 +142,23 @@ public class RedisHCached implements HCache {
          });
 	}
 
+	@Override
+	public List getHashValues(final byte[] key) {
+		return redisTemplate.execute((RedisCallback<List>) connection -> {
+			List<byte[]> hVals = connection.hVals(key);
+			if(hVals==null||hVals.size()<1){
+				return null;
+			}
+			List list=new ArrayList();
+
+			for(byte[] bs:hVals){
+				list.add(FuncKit.unserialize(bs));
+			}
+			return list;
+
+		});
+	}
+
 	public RedisTemplate<String, Object> getRedisTemplate() {
 		return redisTemplate;
 	}
@@ -157,7 +167,7 @@ public class RedisHCached implements HCache {
 		this.redisTemplate = redisTemplate;
 	}
 
-	public int getExpireMS() {
+	public long getExpireMS() {
 		return expireMS;
 	}
 
@@ -165,22 +175,7 @@ public class RedisHCached implements HCache {
 		this.expireMS = expireMS;
 	}
 
-	@Override
-	public List getHashValues(final byte[] key) {
-		return redisTemplate.execute((RedisCallback<List>) connection -> {
-             List<byte[]> hVals = connection.hVals(key);
-             if(hVals==null||hVals.size()<1){
-                 return null;
-             }
-             List list=new ArrayList();
 
-             for(byte[] bs:hVals){
-                 list.add(FuncKit.unserialize(bs));
-             }
-            return list;
-
-        });
-	}
 
 
 

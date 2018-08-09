@@ -25,13 +25,4 @@ public class Https {
         return new SyncBuilder();
     }
 
-
-    public static String asString(Response response) {
-        try {
-            return response.asString();
-        } catch (IOException e) {
-            throw new IllegalArgumentException("Response 转 String 失败", e);
-        }
-    }
-
 }

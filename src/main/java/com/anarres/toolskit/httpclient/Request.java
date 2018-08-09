@@ -114,9 +114,9 @@ public class Request implements Supplier<HttpRequestBase> {
 
     public CompletableFuture<String> executeAsString(AsyncHttpClient client) {
         if(null == entity) {
-            return client.exec(base, params, null, heads, charset, proxy, connTimeout, readTimeout).thenApply(Https::asString);
+            return client.exec(base, params, null, heads, charset, proxy, connTimeout, readTimeout).thenApply(Response::asString);
         } else {
-            return client.exec(base, entity, null, heads, charset, proxy, connTimeout, readTimeout).thenApply(Https::asString);
+            return client.exec(base, entity, null, heads, charset, proxy, connTimeout, readTimeout).thenApply(Response::asString);
         }
     }
 
@@ -147,7 +147,7 @@ public class Request implements Supplier<HttpRequestBase> {
     }
 
     public CompletableFuture<String> asyncExecuteAsString() {
-        return asyncExecute().thenApply(Https::asString);
+        return asyncExecute().thenApply(Response::asString);
     }
 
 

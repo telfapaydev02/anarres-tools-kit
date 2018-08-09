@@ -826,4 +826,24 @@ public class CollectionKit {
 		}
 		return obj.toString();
 	}
+
+	/**
+	 * 取第一个集合对第二个集合的 差集。
+	 * @param one 第一个集合
+	 * @param two 第二个集合
+	 * @param getter 新集合获取方法
+	 * @param <T>
+	 * @param <C>
+	 * @return
+	 */
+	public static <T, C extends Collection<T>> C subtract(Collection<T> one, Collection<T> two, Supplier<C> getter) {
+		C newC = getter.get();
+		for(T t : one) {
+			if(!two.contains(t)) {
+				newC.add(t);
+			}
+		}
+
+		return newC;
+	}
 }

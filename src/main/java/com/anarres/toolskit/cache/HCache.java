@@ -1,6 +1,7 @@
 package com.anarres.toolskit.cache;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 
 /**
@@ -15,7 +16,7 @@ public interface HCache {
 	 * @return
 	 * @throws Exception
 	 */
-	String deleteCached(byte[] key)throws Exception;
+	String deleteCached(byte[]... key)throws Exception;
 	/**
 	 * 更新 缓存
 	 * @param key
@@ -23,7 +24,7 @@ public interface HCache {
 	 * @return
 	 * @throws Exception
 	 */
-	Object updateCached(byte[] key, byte[] value, Long expireMS)throws Exception;
+	Object updateCached(byte[] key, byte[] value, Optional<Long> expireMS)throws Exception;
 	/**
 	 * 获取缓存
 	 * @param key
@@ -33,11 +34,11 @@ public interface HCache {
 	Object getCached(byte[] key)throws Exception;
 	/**
 	 * 根据 正则表达式key 获取 列表
-	 * @param keys
+	 * @param pattern
 	 * @return
 	 * @throws Exception
 	 */
-	Set getKeys(byte[] keys)throws Exception;
+	Set getKeys(byte[] pattern)throws Exception;
 
 	/**
 	 * 根据 正则表达式key 获取 列表

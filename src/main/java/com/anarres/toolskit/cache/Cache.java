@@ -13,6 +13,11 @@ public interface Cache<K, V> {
 
     void clear() throws Exception ;
 
+    /**
+     * size可能是通过keys().size() 来获取的。
+     * @return
+     * @throws Exception
+     */
     int size() throws Exception ;
 
     Set<K> keys() throws Exception ;

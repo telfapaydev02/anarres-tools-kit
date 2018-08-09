@@ -63,7 +63,7 @@ public class Response {
         return response.getHeaders(key);
     }
 
-    public String asString(String charset) throws IOException {
+    public String asString(String charset) {
         String result = null;
         try {
             HttpEntity entity = response.getEntity();
@@ -84,15 +84,21 @@ public class Response {
                 }
 
             }
+        } catch (Exception e) {
+            throw new RuntimeException(e);
         } finally {
-            if(response instanceof CloseableHttpResponse) {
-                HttpTools.closeQuietly((CloseableHttpResponse)response);
-            }
+            this.close();
         }
         return result;
     }
 
-    public String asString() throws IOException {
+    public void close() {
+        if(response instanceof CloseableHttpResponse) {
+            HttpTools.closeQuietly((CloseableHttpResponse)response);
+        }
+    }
+
+    public String asString() {
         return asString(this.charset);
     }
 }

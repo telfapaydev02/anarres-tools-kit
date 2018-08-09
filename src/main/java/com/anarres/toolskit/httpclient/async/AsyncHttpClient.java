@@ -86,11 +86,11 @@ public class AsyncHttpClient {
     }
 
     public CompletableFuture<String> doPost(String url, Map<String, String> params, String charset) {
-        return doPost(url, params, null, null, charset, null).thenApply(Https::asString);
+        return doPost(url, params, null, null, charset, null).thenApply(Response::asString);
     }
 
     public CompletableFuture<String> doGet(String url, Map<String, String> params, String charset) {
-        return doGet(url, params, null, null,charset, null, -1, -1).thenApply(Https::asString);
+        return doGet(url, params, null, null,charset, null, -1, -1).thenApply(Response::asString);
     }
 
     /**
