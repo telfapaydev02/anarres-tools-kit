@@ -3,15 +3,13 @@ package com.anarres.toolskit.cache.redis;
 import com.anarres.toolskit.cache.ExpireCache;
 import com.anarres.toolskit.cache.HCache;
 import com.anarres.toolskit.support.FuncKit;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import java.util.Collection;
 import java.util.Optional;
 import java.util.Set;
 
 public class RedisExpireCache<V> implements ExpireCache<V> {
-    private static Logger logger = LoggerFactory.getLogger(RedisExpireCache.class);
+
     private final String name;
     private final HCache cached;
 
@@ -82,7 +80,6 @@ public class RedisExpireCache<V> implements ExpireCache<V> {
 
     @Override
     public Collection<V> values() throws Exception {
-
-        return null;
+        throw new Exception("not support");
     }
 }

@@ -46,8 +46,12 @@ public class BeanKit {
      * @return 字段描述数组
      * @throws IntrospectionException
      */
-    public static PropertyDescriptor[] getPropertyDescriptors(Class<?> clazz) throws IntrospectionException {
-        return Introspector.getBeanInfo(clazz).getPropertyDescriptors();
+    public static PropertyDescriptor[] getPropertyDescriptors(Class<?> clazz)  {
+        try {
+            return Introspector.getBeanInfo(clazz).getPropertyDescriptors();
+        } catch (IntrospectionException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     /**
@@ -57,7 +61,7 @@ public class BeanKit {
      * @return 字段名和字段描述Map
      * @throws IntrospectionException
      */
-    public static Map<String, PropertyDescriptor> getFieldNamePropertyDescriptorMap(Class<?> clazz) throws IntrospectionException {
+    public static Map<String, PropertyDescriptor> getFieldNamePropertyDescriptorMap(Class<?> clazz)  {
         final PropertyDescriptor[] propertyDescriptors = getPropertyDescriptors(clazz);
         Map<String, PropertyDescriptor> map = new HashMap<>();
         for (PropertyDescriptor propertyDescriptor : propertyDescriptors) {
@@ -361,12 +365,12 @@ public class BeanKit {
             }
             actualEditable = copyOptions.editable;
         }
-        PropertyDescriptor[] targetPds = null;
+        PropertyDescriptor[] targetPds;
         Map<String, PropertyDescriptor> sourcePdMap;
         try {
             sourcePdMap = getFieldNamePropertyDescriptorMap(source.getClass());
             targetPds = getPropertyDescriptors(actualEditable);
-        } catch (IntrospectionException e) {
+        } catch (RuntimeException e) {
             throw new ToolBoxException(e);
         }
 
@@ -400,14 +404,14 @@ public class BeanKit {
      *
      * @author Looly
      */
-    public static interface ValueProvider {
+    public interface ValueProvider {
         /**
          * 获取值
          *
          * @param name Bean对象中参数名
          * @return 对应参数名的值
          */
-        public Object value(String name);
+        Object value(String name);
     }
 
     /**

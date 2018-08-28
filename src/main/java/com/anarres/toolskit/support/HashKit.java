@@ -17,7 +17,9 @@ import java.security.*;
 import java.security.spec.InvalidKeySpecException;
 import java.security.spec.PKCS8EncodedKeySpec;
 import java.security.spec.RSAPublicKeySpec;
-import java.util.*;
+import java.util.Arrays;
+import java.util.Base64;
+import java.util.Map;
 
 /**
  * Created by ath on 2016/7/2.
@@ -28,6 +30,8 @@ public class HashKit {
     public static final String MD5 = "MD5";
 
     public static final String SHA_1 = "SHA-1";
+
+    public static final String SHA_256 = "SHA-256";
 
     private static final SecureRandom random = new SecureRandom();
 
@@ -155,40 +159,37 @@ public class HashKit {
     }
 
     public static String MD5Encode(String origin) {
-        String resultString = null;
-        try {
-            resultString = new String(origin);
-            MessageDigest md = MessageDigest.getInstance(MD5);
-            resultString = Hex.encodeHexString(md.digest(resultString
-                    .getBytes()));
-        } catch (Exception ex) {
-            logger.error("MD5 失败", ex);
-        }
-        return resultString;
+       return encode(MD5, origin);
     }
 
     public static String MD5Encode(String origin, String charset) {
+        return encode(MD5, origin, charset);
+    }
+
+    public static String SHA1Encode(String origin) {
+        return encode(SHA_1, origin);
+    }
+
+    public static String encode(String algorithmName, String origin) {
         String resultString = null;
         try {
-            resultString = new String(origin);
-            MessageDigest md = MessageDigest.getInstance(MD5);
-            resultString = Hex.encodeHexString(md.digest(resultString
-                    .getBytes(charset)));
+            MessageDigest md = MessageDigest.getInstance(algorithmName);
+            resultString = Hex.encodeHexString(md.digest(origin
+                    .getBytes()));
         } catch (Exception ex) {
-            logger.error("MD5 失败", ex);
+            logger.error(algorithmName + "失败", ex);
         }
         return resultString;
     }
 
-    public static String SHA1Encode(String origin) {
+    public static String encode(String algorithmName, String origin, String charset) {
         String resultString = null;
         try {
-            resultString = new String(origin);
-            MessageDigest md = MessageDigest.getInstance(SHA_1);
-            resultString = Hex.encodeHexString(md.digest(resultString
-                    .getBytes()));
+            MessageDigest md = MessageDigest.getInstance(algorithmName);
+            resultString = Hex.encodeHexString(md.digest(origin
+                    .getBytes(charset)));
         } catch (Exception ex) {
-            logger.error("SHA-1失败", ex);
+            logger.error(algorithmName + "失败", ex);
         }
         return resultString;
     }
