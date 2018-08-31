@@ -846,4 +846,15 @@ public class CollectionKit {
 
 		return newC;
 	}
+
+	public static <T, C extends Collection<T>> C union(Collection<T> one, Collection<T> two, Supplier<C> getter) {
+		Set<T> set = new HashSet<>();
+		set.addAll(one);
+		set.addAll(two);
+		C newC = getter.get();
+		newC.addAll(set);
+		return newC;
+	}
+
+
 }
