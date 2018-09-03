@@ -86,6 +86,7 @@ public abstract class ConfigBuilderProxy<T extends ConfigBuilderProxy, H> {
 
         return (T) this;
     }
+
     // ================= request config builder =================
     protected final RequestConfig.Builder configBuilder = RequestConfig.custom();
     public T setExpectContinueEnabled(final boolean expectContinueEnabled) {

@@ -9,6 +9,8 @@ import org.apache.http.HttpEntity;
 import org.apache.http.HttpEntityEnclosingRequest;
 import org.apache.http.HttpHost;
 import org.apache.http.NameValuePair;
+import org.apache.http.annotation.Contract;
+import org.apache.http.annotation.ThreadingBehavior;
 import org.apache.http.client.config.RequestConfig;
 import org.apache.http.client.entity.UrlEncodedFormEntity;
 import org.apache.http.client.methods.*;
@@ -61,6 +63,7 @@ import java.util.Map;
  * Created by ath on 2016/8/18.
  */
 //@ThreadSafe
+@Contract(threading = ThreadingBehavior.IMMUTABLE_CONDITIONAL)
 public class HttpClient {
 
     public HttpClient(String defaultCharset, CloseableHttpClient httpClient, RequestConfig defaultConfig) {

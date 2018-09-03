@@ -1,9 +1,10 @@
 package com.anarres.toolskit.httpclient.async;
 
-import com.anarres.toolskit.httpclient.Https;
 import com.anarres.toolskit.httpclient.Response;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.http.*;
+import org.apache.http.annotation.Contract;
+import org.apache.http.annotation.ThreadingBehavior;
 import org.apache.http.client.config.RequestConfig;
 import org.apache.http.client.entity.UrlEncodedFormEntity;
 import org.apache.http.client.methods.HttpGet;
@@ -30,6 +31,7 @@ import java.util.concurrent.CompletableFuture;
 /**
  * Created by ath on 2017/1/6.
  */
+@Contract(threading = ThreadingBehavior.IMMUTABLE_CONDITIONAL)
 public class AsyncHttpClient {
     private final String defaultCharset;
     private final CloseableHttpAsyncClient asyncHttpClient;
@@ -40,7 +42,6 @@ public class AsyncHttpClient {
         this.defaultCharset = defaultCharset;
         this.asyncHttpClient = asyncHttpClient;
         this.defaultConfig = defaultConfig;
-
     }
 
     public AsyncHttpClient init() {
@@ -261,7 +262,6 @@ public class AsyncHttpClient {
         }
 
         request.setConfig(cfgBuilder.build());
-
 
         if(heads != null) {
             for(String key : heads.keySet()) {

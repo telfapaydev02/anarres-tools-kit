@@ -5,6 +5,8 @@ import com.anarres.toolskit.httpclient.exception.CallHttpException;
 import com.anarres.toolskit.httpclient.sync.HttpClient;
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpHost;
+import org.apache.http.annotation.Contract;
+import org.apache.http.annotation.ThreadingBehavior;
 import org.apache.http.client.methods.*;
 import org.apache.http.entity.StringEntity;
 
@@ -27,7 +29,7 @@ import java.util.function.Supplier;
  *  即便访问N个request访问的是同一个网站，也不混淆。通过每个request开启一个连接，这样就能保证request和response的一致)。
  * Created by ath on 2016/10/28.
  */
-//@ThreadSafe
+@Contract(threading = ThreadingBehavior.IMMUTABLE_CONDITIONAL)
 public class Request implements Supplier<HttpRequestBase> {
 
     private final String url;
@@ -39,7 +41,7 @@ public class Request implements Supplier<HttpRequestBase> {
     private final int connTimeout;
     private final int readTimeout;
 
-//    @GuardedBy("this")
+    //@GuardedBy("this")
     private HttpRequestBase base;
 
     private final HttpHost proxy;
@@ -232,7 +234,7 @@ public class Request implements Supplier<HttpRequestBase> {
 
         private HttpHost proxy = null;
 
-        private String charset = "UTF-8";
+        private String charset;
 
         public Builder() {
             headers = new HashMap<>();

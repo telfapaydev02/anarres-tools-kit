@@ -2,6 +2,8 @@ package com.anarres.toolskit.httpclient.async;
 
 import com.anarres.toolskit.httpclient.ConfigBuilderProxy;
 import org.apache.http.HttpHost;
+import org.apache.http.annotation.Contract;
+import org.apache.http.annotation.ThreadingBehavior;
 import org.apache.http.client.config.RequestConfig;
 import org.apache.http.config.Registry;
 import org.apache.http.config.RegistryBuilder;
@@ -45,6 +47,15 @@ public class AsyncBuilder extends ConfigBuilderProxy<AsyncBuilder, AsyncHttpClie
     private int maxConnectEachHost = 5;
 
     private Map<HttpRoute, Integer> hostMaxConnect = new HashMap<>();
+
+    private HttpAsyncClientBuilder clientBuilder;
+
+    public AsyncBuilder(HttpAsyncClientBuilder builder) {
+        this.clientBuilder = builder;
+    }
+    public AsyncBuilder() {
+        this.clientBuilder = HttpAsyncClients.custom();
+    }
 
     /**
      * 最高连接数
@@ -101,7 +112,7 @@ public class AsyncBuilder extends ConfigBuilderProxy<AsyncBuilder, AsyncHttpClie
                                  SecureRandom secureRandom) throws KeyManagementException, NoSuchAlgorithmException {
         if(null == trustmanagers) {
             RequestConfig config = configBuilder.build();
-            CloseableHttpAsyncClient client = HttpAsyncClientBuilder.create().setDefaultRequestConfig(config).build();
+            CloseableHttpAsyncClient client = clientBuilder.setDefaultRequestConfig(config).build();
 
             return new AsyncHttpClient(defaultCharset, client, config);
         }
@@ -135,7 +146,7 @@ public class AsyncBuilder extends ConfigBuilderProxy<AsyncBuilder, AsyncHttpClie
         hostMaxConnect.forEach((httpRoute, max) -> connManager.setMaxPerRoute(httpRoute, max));//每个域名最多能发起多少个连接。
 
 
-        CloseableHttpAsyncClient httpclient = HttpAsyncClients.custom()
+        CloseableHttpAsyncClient httpclient = clientBuilder
                 .setConnectionManager(connManager)
                 .build();
 

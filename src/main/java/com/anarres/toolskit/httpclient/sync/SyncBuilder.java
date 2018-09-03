@@ -15,6 +15,14 @@ import java.security.SecureRandom;
 
 public class SyncBuilder extends ConfigBuilderProxy<SyncBuilder, HttpClient> {
 
+    private HttpClientBuilder clientBuilder;
+
+    public SyncBuilder(HttpClientBuilder builder) {
+        clientBuilder = builder;
+    }
+    public SyncBuilder() {
+        clientBuilder = HttpClientBuilder.create();
+    }
 
     @Override
     public HttpClient build(KeyManager[] keymanagers,
@@ -23,7 +31,7 @@ public class SyncBuilder extends ConfigBuilderProxy<SyncBuilder, HttpClient> {
 
         if(null == trustmanagers) {
             RequestConfig config = configBuilder.build();
-            CloseableHttpClient client = HttpClientBuilder.create().setDefaultRequestConfig(config).build();
+            CloseableHttpClient client = clientBuilder.setDefaultRequestConfig(config).build();
             return new HttpClient(defaultCharset, client, config);
         }
         // 创建 SSL 链接
@@ -32,7 +40,7 @@ public class SyncBuilder extends ConfigBuilderProxy<SyncBuilder, HttpClient> {
 
         sslcontext.init(keymanagers, trustmanagers, secureRandom);
         RequestConfig config = configBuilder.build();
-        CloseableHttpClient client = HttpClientBuilder.create()
+        CloseableHttpClient client = clientBuilder
                 .setSSLSocketFactory(new SSLConnectionSocketFactory(sslcontext))
                 .setDefaultRequestConfig(config)
                 .build();
