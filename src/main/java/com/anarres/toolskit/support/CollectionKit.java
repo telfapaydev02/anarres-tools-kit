@@ -664,7 +664,14 @@ public class CollectionKit {
 		Collections.sort(list, comparator);
 		return list;
 	}
-	
+
+	public static <K, V> Map<K,V> sortMap(Map<K, V> map, Comparator<K> keyComp) {
+		return map.keySet().stream().sorted(keyComp)
+				.collect(() -> new LinkedHashMap(),
+						(Map<K,V> m, K k) -> m.put(k, map.get(k)),
+						(m1, m2) -> {});
+	}
+
 	//------------------------------------------------------------------- 基本类型的数组转换为包装类型数组
 	/**
 	 * 将基本类型数组包装为包装类型
@@ -855,6 +862,5 @@ public class CollectionKit {
 		newC.addAll(set);
 		return newC;
 	}
-
 
 }
