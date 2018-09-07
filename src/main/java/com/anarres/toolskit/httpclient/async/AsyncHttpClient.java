@@ -300,7 +300,7 @@ public class AsyncHttpClient {
             }
             @Override
             public void failed(Exception e) {
-                future.completeExceptionally(e);
+                future.completeExceptionally(new IOException(request.toString() + "失败", e));
             }
 
             public void cancelled() {
