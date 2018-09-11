@@ -19,7 +19,7 @@ public class RedisExpireCache<V> implements ExpireCache<V> {
     }
 
     private String prefix() {
-        return name + "_->_";
+        return name + ":";
     }
     /**
      * 获得byte[]型的key
