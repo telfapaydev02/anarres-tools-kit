@@ -42,9 +42,9 @@ public class AsyncBuilder extends ConfigBuilderProxy<AsyncBuilder, AsyncHttpClie
      */
     private int workThread = 1;
 
-    private int totalConnectPoolMax = 5;
+    private int totalConnectPoolMax = 100;
 
-    private int maxConnectEachHost = 5;
+    private int maxConnectEachHost = 10;
 
     private Map<HttpRoute, Integer> hostMaxConnect = new HashMap<>();
 
@@ -140,11 +140,9 @@ public class AsyncBuilder extends ConfigBuilderProxy<AsyncBuilder, AsyncHttpClie
         }
         PoolingNHttpClientConnectionManager connManager = new PoolingNHttpClientConnectionManager(ioReactor, null, sessionStrategyRegistry, null);
 
-        connManager.setMaxTotal(3);
         connManager.setDefaultMaxPerRoute(maxConnectEachHost);//每个域名一次能同时发起多少个请求。
         connManager.setMaxTotal(totalConnectPoolMax);//最多一次能同时发起多少个请求（每个请求就是一个连接）
         hostMaxConnect.forEach((httpRoute, max) -> connManager.setMaxPerRoute(httpRoute, max));//每个域名最多能发起多少个连接。
-
 
         CloseableHttpAsyncClient httpclient = clientBuilder
                 .setConnectionManager(connManager)
