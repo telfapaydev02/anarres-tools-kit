@@ -259,6 +259,7 @@ public class AsyncHttpClient {
 
         if(-1 != connTimeout){
             cfgBuilder.setConnectTimeout(connTimeout);
+            cfgBuilder.setConnectionRequestTimeout(connTimeout);
         }
 
         request.setConfig(cfgBuilder.build());
