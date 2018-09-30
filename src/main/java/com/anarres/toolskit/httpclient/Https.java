@@ -12,8 +12,17 @@ import java.io.IOException;
 
 public class Https {
 
-    public static HttpClient syncClient =  sync().setDefaultCharset("UTF-8").trustAll().build();
-    public static AsyncHttpClient asyncClient =  async().setDefaultCharset("UTF-8").trustAll().build().init();
+    public static HttpClient syncClient =  sync().setDefaultCharset("UTF-8")
+            .setConnectTimeout(10000)
+            .setSocketTimeout(10000)
+            .trustAll()
+            .build();
+    public static AsyncHttpClient asyncClient =  async().setDefaultCharset("UTF-8")
+            .setConnectTimeout(10000)
+            .setSocketTimeout(10000)
+            .trustAll()
+            .build()
+            .init();
 
     public static AsyncBuilder async() {
         return new AsyncBuilder();

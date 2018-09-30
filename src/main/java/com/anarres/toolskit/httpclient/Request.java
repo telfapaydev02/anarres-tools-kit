@@ -12,6 +12,7 @@ import org.apache.http.entity.StringEntity;
 
 import java.io.IOException;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.concurrent.CompletableFuture;
 import java.util.function.Supplier;
@@ -238,7 +239,7 @@ public class Request implements Supplier<HttpRequestBase> {
 
         public Builder() {
             headers = new HashMap<>();
-            params = new HashMap<>();
+            params = new LinkedHashMap<>();
             charset = "UTF-8";
             connTimeout = -1;
             readTimeout = -1;
