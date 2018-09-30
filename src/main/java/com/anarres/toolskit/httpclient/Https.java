@@ -15,11 +15,13 @@ public class Https {
     public static HttpClient syncClient =  sync().setDefaultCharset("UTF-8")
             .setConnectTimeout(10000)
             .setSocketTimeout(10000)
+            .setConnectionRequestTimeout(10000)
             .trustAll()
             .build();
     public static AsyncHttpClient asyncClient =  async().setDefaultCharset("UTF-8")
             .setConnectTimeout(10000)
             .setSocketTimeout(10000)
+            .setConnectionRequestTimeout(10000)
             .trustAll()
             .build()
             .init();
