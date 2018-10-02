@@ -138,7 +138,7 @@ public class AsyncBuilder extends ConfigBuilderProxy<AsyncBuilder, AsyncHttpClie
             logger.error("创建 ioReactor 失败", e);
             return null;
         }
-        PoolingNHttpClientConnectionManager connManager = new PoolingNHttpClientConnectionManager(ioReactor, null, sessionStrategyRegistry, null);
+        PoolingNHttpClientConnectionManager connManager = new PoolingNHttpClientConnectionManager(ioReactor, sessionStrategyRegistry);
 
         connManager.setDefaultMaxPerRoute(maxConnectEachHost);//每个域名一次能同时发起多少个请求。
         connManager.setMaxTotal(totalConnectPoolMax);//最多一次能同时发起多少个请求（每个请求就是一个连接）
