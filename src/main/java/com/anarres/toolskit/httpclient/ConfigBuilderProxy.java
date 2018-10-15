@@ -43,6 +43,8 @@ public abstract class ConfigBuilderProxy<T extends ConfigBuilderProxy, H> {
 
     protected boolean isTrustAll;
 
+    protected boolean ignoreSSLCert;
+
     public T useTLS() {
         this.protocol = "TLS";
         return (T) this;
@@ -50,6 +52,11 @@ public abstract class ConfigBuilderProxy<T extends ConfigBuilderProxy, H> {
 
     public T trustAll(){
         this.isTrustAll = true;
+        return (T) this;
+    }
+
+    public T ignoreSSLCert() {
+        this.ignoreSSLCert = true;
         return (T) this;
     }
 
@@ -201,6 +208,25 @@ public abstract class ConfigBuilderProxy<T extends ConfigBuilderProxy, H> {
                     }
                 }
             }
+        } else if(ignoreSSLCert) {
+            tms = new TrustManager[] { new X509TrustManager() {
+                @Override
+                public void checkClientTrusted(
+                        java.security.cert.X509Certificate[] paramArrayOfX509Certificate,
+                        String paramString) {
+                }
+
+                @Override
+                public void checkServerTrusted(
+                        java.security.cert.X509Certificate[] paramArrayOfX509Certificate,
+                        String paramString) {
+                }
+
+                @Override
+                public java.security.cert.X509Certificate[] getAcceptedIssuers() {
+                    return null;
+                }
+            }};
         } else if(isTrustAll) {
             tms = new TrustManager[] { new X509TrustManager() {
 

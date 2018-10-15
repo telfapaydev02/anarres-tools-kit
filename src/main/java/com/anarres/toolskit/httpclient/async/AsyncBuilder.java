@@ -8,6 +8,8 @@ import org.apache.http.client.config.RequestConfig;
 import org.apache.http.config.Registry;
 import org.apache.http.config.RegistryBuilder;
 import org.apache.http.conn.routing.HttpRoute;
+import org.apache.http.conn.ssl.NoopHostnameVerifier;
+import org.apache.http.conn.ssl.SSLConnectionSocketFactory;
 import org.apache.http.impl.nio.client.CloseableHttpAsyncClient;
 import org.apache.http.impl.nio.client.HttpAsyncClientBuilder;
 import org.apache.http.impl.nio.client.HttpAsyncClients;
@@ -20,6 +22,7 @@ import org.apache.http.nio.conn.ssl.SSLIOSessionStrategy;
 import org.apache.http.nio.reactor.ConnectingIOReactor;
 import org.apache.http.nio.reactor.IOReactorException;
 
+import javax.net.ssl.HostnameVerifier;
 import javax.net.ssl.KeyManager;
 import javax.net.ssl.SSLContext;
 import javax.net.ssl.TrustManager;
@@ -110,6 +113,7 @@ public class AsyncBuilder extends ConfigBuilderProxy<AsyncBuilder, AsyncHttpClie
     public AsyncHttpClient build(KeyManager[] keymanagers,
                                  TrustManager[] trustmanagers,
                                  SecureRandom secureRandom) throws KeyManagementException, NoSuchAlgorithmException {
+
         if(null == trustmanagers) {
             RequestConfig config = configBuilder.build();
             CloseableHttpAsyncClient client = clientBuilder.setDefaultRequestConfig(config).build();
@@ -121,10 +125,17 @@ public class AsyncBuilder extends ConfigBuilderProxy<AsyncBuilder, AsyncHttpClie
                 this.protocol != null ? this.protocol : "TLS");
         sslcontext.init(keymanagers, trustmanagers, secureRandom);
 
+        HostnameVerifier verifier;
+        if( ignoreSSLCert ) {
+            verifier = new NoopHostnameVerifier();
+        } else {
+            verifier = SSLIOSessionStrategy.getDefaultHostnameVerifier();
+        }
+
         // 设置协议http和https对应的处理socket链接工厂的对象
         Registry<SchemeIOSessionStrategy> sessionStrategyRegistry = RegistryBuilder.<SchemeIOSessionStrategy>create()
                 .register("http", NoopIOSessionStrategy.INSTANCE)
-                .register("https", new SSLIOSessionStrategy(sslcontext, new String[] { "TLSv1" }, null,SSLIOSessionStrategy.getDefaultHostnameVerifier() ))
+                .register("https", new SSLIOSessionStrategy(sslcontext, new String[] { "TLSv1" }, null, verifier))
                 .build();
 
         //配置io线程
