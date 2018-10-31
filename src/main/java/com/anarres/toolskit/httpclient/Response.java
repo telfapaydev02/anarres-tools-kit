@@ -4,6 +4,8 @@ import org.apache.http.*;
 import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpRequestBase;
 import org.apache.http.util.EntityUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -15,7 +17,7 @@ import java.io.InputStream;
  */
 //@ThreadSafe
 public class Response {
-
+    private final Logger logger = LoggerFactory.getLogger(Response.class);
     private final StatusLine statusLine;
     private final HttpResponse response;
     private final String charset;
@@ -89,6 +91,7 @@ public class Response {
         } finally {
             this.close();
         }
+        logger.info("response -> " + result);
         return result;
     }
 
