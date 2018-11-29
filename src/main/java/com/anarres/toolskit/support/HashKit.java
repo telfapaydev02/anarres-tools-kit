@@ -227,6 +227,11 @@ public class HashKit {
         }
         return src.substring(0, src.length() - separator.length());
     }
+
+    public static String signSrc(Map<String, ? extends Object> map, boolean useEmpty, int order) {
+        return signSrc(map, "&", "=", useEmpty, order);
+    }
+
     public static String signSrcVlaueOnly(Map<String, ? extends Object> map, String separator, boolean useEmpty, int order) {
         if(map == null || map.size() < 1) {
             return "";
