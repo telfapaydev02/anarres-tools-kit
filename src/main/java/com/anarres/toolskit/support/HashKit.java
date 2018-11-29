@@ -161,6 +161,20 @@ public class HashKit {
         return hash;
     }
 
+    public static String sha1_HMAC(String message, String secret) {
+        String hash = "";
+        try {
+            Mac sha1_HMAC = Mac.getInstance("HmacSHA1");
+            SecretKeySpec secret_key = new SecretKeySpec(secret.getBytes(), "HmacSHA1");
+            sha1_HMAC.init(secret_key);
+            byte[] bytes = sha1_HMAC.doFinal(message.getBytes());
+            hash = Hex.encodeHexString(bytes);
+        } catch (Exception e) {
+            System.out.println("Error HmacSHA1 ===========" + e.getMessage());
+        }
+        return hash;
+    }
+
     public static byte[] encode(String algorithmName, byte[] source, byte[] salt, int hashIterations) throws NoSuchAlgorithmException {
 
         MessageDigest digest = MessageDigest.getInstance(algorithmName);
@@ -210,6 +224,31 @@ public class HashKit {
             }
             Object value = map.get(key) == null ? "" : map.get(key);
             src += key + eq + value.toString() + separator;
+        }
+        return src.substring(0, src.length() - separator.length());
+    }
+    public static String signSrcVlaueOnly(Map<String, ? extends Object> map, String separator, boolean useEmpty, int order) {
+        if(map == null || map.size() < 1) {
+            return "";
+        }
+        String[] keys = new String[map.size()];
+        keys = map.keySet().toArray(keys);
+        if(order != 0) {
+            Arrays.sort(keys, (o1, o2) -> {
+                if(order < 0) {
+                    return o1.compareToIgnoreCase(o2);
+                } else {
+                    return o2.compareToIgnoreCase(o1);
+                }
+            });
+        }
+        String src = "";
+        for(String key: keys) {
+            if(!useEmpty && (null == map.get(key) || "".equals(map.get(key).toString().trim()))) {
+                continue;
+            }
+            Object value = map.get(key) == null ? "" : map.get(key);
+            src += value.toString() + separator;
         }
         return src.substring(0, src.length() - separator.length());
     }
