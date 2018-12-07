@@ -145,6 +145,10 @@ public class DateKit {
 		return parseDate(s).getTime() >= parseDate(e).getTime();
 	}
 
+	public static String now(String pattern) {
+		return format(new Date(), pattern);
+	}
+
 	/**
 	 * 格式化日期
 	 *
