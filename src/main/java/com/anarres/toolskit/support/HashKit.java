@@ -211,9 +211,9 @@ public class HashKit {
         if(order != 0) {
             Arrays.sort(keys, (o1, o2) -> {
                 if(order < 0) {
-                    return o1.compareToIgnoreCase(o2);
+                    return o1.compareTo(o2);
                 } else {
-                    return o2.compareToIgnoreCase(o1);
+                    return o2.compareTo(o1);
                 }
             });
         }
@@ -241,9 +241,9 @@ public class HashKit {
         if(order != 0) {
             Arrays.sort(keys, (o1, o2) -> {
                 if(order < 0) {
-                    return o1.compareToIgnoreCase(o2);
+                    return o1.compareTo(o2);
                 } else {
-                    return o2.compareToIgnoreCase(o1);
+                    return o2.compareTo(o1);
                 }
             });
         }
