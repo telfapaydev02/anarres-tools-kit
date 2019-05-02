@@ -135,7 +135,7 @@ public class AsyncBuilder extends ConfigBuilderProxy<AsyncBuilder, AsyncHttpClie
         // 设置协议http和https对应的处理socket链接工厂的对象
         Registry<SchemeIOSessionStrategy> sessionStrategyRegistry = RegistryBuilder.<SchemeIOSessionStrategy>create()
                 .register("http", NoopIOSessionStrategy.INSTANCE)
-                .register("https", new SSLIOSessionStrategy(sslcontext, new String[] { "TLSv1" }, null, verifier))
+                .register("https", new SSLIOSessionStrategy(sslcontext, new String[] { "TLSv1", "TLSv1.1", "TLSv1.2" }, null, verifier))
                 .build();
 
         //配置io线程
