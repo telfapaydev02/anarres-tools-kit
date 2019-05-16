@@ -1,6 +1,7 @@
 package com.anarres.toolskit.httpclient.async;
 
 import com.anarres.toolskit.httpclient.Response;
+import com.baomidou.mybatisplus.toolkit.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.http.*;
 import org.apache.http.annotation.Contract;
@@ -14,7 +15,10 @@ import org.apache.http.client.methods.HttpRequestBase;
 import org.apache.http.concurrent.FutureCallback;
 import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.nio.client.CloseableHttpAsyncClient;
+import org.apache.http.impl.nio.reactor.DefaultConnectingIOReactor;
+import org.apache.http.impl.nio.reactor.ExceptionEvent;
 import org.apache.http.message.BasicNameValuePair;
+import org.apache.http.nio.reactor.IOReactorException;
 import org.apache.http.protocol.HttpContext;
 import org.apache.http.util.EntityUtils;
 import org.slf4j.Logger;
@@ -24,6 +28,8 @@ import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.net.URI;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 import java.util.Map;
 import java.util.concurrent.CompletableFuture;
 
@@ -310,6 +316,17 @@ public class AsyncHttpClient {
         };
 
         if(null == context) {
+            try {
+                DefaultConnectingIOReactor reactor = new DefaultConnectingIOReactor();
+                List<ExceptionEvent> logs = reactor.getAuditLog();
+                if(CollectionUtils.isNotEmpty(logs)){
+                    for (ExceptionEvent log:logs) {
+                        logger.error("造成IoReactor异常event"+log.getCause());
+                    }
+                }
+            } catch (IOReactorException e) {
+                logger.error("初始化IOReactor错误"+e);
+            }
             asyncHttpClient.execute(request, fc);
         } else {
             asyncHttpClient.execute(request, context, fc);
