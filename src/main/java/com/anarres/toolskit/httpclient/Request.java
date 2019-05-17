@@ -144,9 +144,9 @@ public class Request implements Supplier<HttpRequestBase> {
         Https.asyncClient.shutdown();
     }
 
-    public static void start(){
+    /*public static void start(){
         Https.Rebuild();
-    }
+    }*/
 
     public String executeAsString() throws CallHttpException, IOException {
         return execute().asString();
@@ -156,7 +156,7 @@ public class Request implements Supplier<HttpRequestBase> {
      * 如果当前异步HttpClient工作线程挂掉了,尝试重建HttpClient
      * 在同步方法里面进行二次判断,避免HttpClient重复创建,造成内存泄漏
      */
-    public synchronized void restart(){
+    /*public synchronized void restart(){
         if(!this.isRunning()){
             Request.start();
         }
@@ -165,7 +165,7 @@ public class Request implements Supplier<HttpRequestBase> {
         if(!this.isRunning()){
             this.restart();
         }
-    }
+    }*/
 
 
     public CompletableFuture<Response> asyncExecute() {
