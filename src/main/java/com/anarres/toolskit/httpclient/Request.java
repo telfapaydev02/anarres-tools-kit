@@ -136,12 +136,40 @@ public class Request implements Supplier<HttpRequestBase> {
         }
     }
 
+    public static boolean isRunning(){
+        return Https.asyncClient.isRunning();
+    }
+
+    public static void shutdown(){
+        Https.asyncClient.shutdown();
+    }
+
+    public static void start(){
+        Https.Rebuild();
+    }
+
     public String executeAsString() throws CallHttpException, IOException {
         return execute().asString();
     }
 
+    /**
+     * 如果当前异步HttpClient工作线程挂掉了,尝试重建HttpClient
+     * 在同步方法里面进行二次判断,避免HttpClient重复创建,造成内存泄漏
+     */
+    public synchronized void restart(){
+        if(!this.isRunning()){
+            Request.start();
+        }
+    }
+    public void ensureRunning(){
+        if(!this.isRunning()){
+            this.restart();
+        }
+    }
+
 
     public CompletableFuture<Response> asyncExecute() {
+        this.ensureRunning();
         if(null == entity) {
             return Https.asyncClient.exec(base, params, null, heads, charset, proxy, connTimeout, readTimeout);
         } else {
@@ -322,6 +350,8 @@ public class Request implements Supplier<HttpRequestBase> {
             this.url = url;
             return this;
         }
+
+
 
         public Request build() {
             if(null != body) {

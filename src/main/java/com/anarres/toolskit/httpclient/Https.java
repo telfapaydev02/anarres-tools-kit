@@ -30,6 +30,16 @@ public class Https {
         return new AsyncBuilder();
     }
 
+    public static void Rebuild(){
+        asyncClient =  async().setDefaultCharset("UTF-8")
+                .setConnectTimeout(10000)
+                .setSocketTimeout(10000)
+                .setConnectionRequestTimeout(10000)
+                .trustAll()
+                .build()
+                .init();
+    }
+
     public static SyncBuilder sync() {
         return new SyncBuilder();
     }

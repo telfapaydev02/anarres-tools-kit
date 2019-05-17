@@ -64,6 +64,10 @@ public class AsyncHttpClient {
         return this;
     }
 
+    public boolean isRunning(){
+        return  asyncHttpClient.isRunning();
+    }
+
     public void start() {
         asyncHttpClient.start();
     }
