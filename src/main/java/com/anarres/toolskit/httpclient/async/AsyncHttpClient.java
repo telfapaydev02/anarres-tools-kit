@@ -320,7 +320,7 @@ public class AsyncHttpClient {
         };
 
         if(null == context) {
-            try {
+            /*try {
                 DefaultConnectingIOReactor reactor = new DefaultConnectingIOReactor();
                 List<ExceptionEvent> logs = reactor.getAuditLog();
                 if(CollectionUtils.isNotEmpty(logs)){
@@ -330,7 +330,7 @@ public class AsyncHttpClient {
                 }
             } catch (IOReactorException e) {
                 logger.error("初始化IOReactor错误"+e);
-            }
+            }*/
             asyncHttpClient.execute(request, fc);
         } else {
             asyncHttpClient.execute(request, context, fc);
