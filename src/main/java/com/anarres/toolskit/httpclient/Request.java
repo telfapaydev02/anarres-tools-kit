@@ -169,7 +169,7 @@ public class Request implements Supplier<HttpRequestBase> {
 
 
     public CompletableFuture<Response> asyncExecute() {
-        this.ensureRunning();
+        //this.ensureRunning();
         if(null == entity) {
             return Https.asyncClient.exec(base, params, null, heads, charset, proxy, connTimeout, readTimeout);
         } else {
