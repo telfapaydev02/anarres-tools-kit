@@ -30,7 +30,7 @@ public class Https {
         return new AsyncBuilder();
     }
 
-   /* public static void Rebuild(){
+    public static void Rebuild(){
         asyncClient =  async().setDefaultCharset("UTF-8")
                 .setConnectTimeout(10000)
                 .setSocketTimeout(10000)
@@ -38,7 +38,7 @@ public class Https {
                 .trustAll()
                 .build()
                 .init();
-    }*/
+    }
 
     public static SyncBuilder sync() {
         return new SyncBuilder();

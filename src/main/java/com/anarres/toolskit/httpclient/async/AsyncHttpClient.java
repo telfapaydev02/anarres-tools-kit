@@ -320,17 +320,6 @@ public class AsyncHttpClient {
         };
 
         if(null == context) {
-            /*try {
-                DefaultConnectingIOReactor reactor = new DefaultConnectingIOReactor();
-                List<ExceptionEvent> logs = reactor.getAuditLog();
-                if(CollectionUtils.isNotEmpty(logs)){
-                    for (ExceptionEvent log:logs) {
-                        logger.error("造成IoReactor异常event"+log.getCause());
-                    }
-                }
-            } catch (IOReactorException e) {
-                logger.error("初始化IOReactor错误"+e);
-            }*/
             asyncHttpClient.execute(request, fc);
         } else {
             asyncHttpClient.execute(request, context, fc);
