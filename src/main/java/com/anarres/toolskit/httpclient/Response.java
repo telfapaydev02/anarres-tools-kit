@@ -91,7 +91,7 @@ public class Response {
         } finally {
             this.close();
         }
-        logger.info("response -> " + result);
+        logger.info("request->"+request.getURI()+",status->"+statusLine.getStatusCode()+",response -> " + result);
         return result;
     }
 
