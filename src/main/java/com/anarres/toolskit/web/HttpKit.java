@@ -58,10 +58,7 @@ public class HttpKit {
         if (ip == null || ip.length() == 0 || "unknown".equalsIgnoreCase(ip)) {
             ip = request.getHeader("Proxy-Client-IP");
         } else {
-            int index = ip.lastIndexOf(",");
-            if (index != -1) {
-                ip = ip.substring(index + 1);
-            }
+            ip = ip.split(",")[0];
         }
         if (ip == null || ip.length() == 0 || "unknown".equalsIgnoreCase(ip)) {
             ip = request.getHeader("WL-Proxy-Client-IP");
